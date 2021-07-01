@@ -33,7 +33,7 @@ namespace CarRental.API.Vehicles
             services.AddAutoMapper(typeof(Startup));
             services.AddDbContext<VehiclesDbContext>(options =>
             {
-                options.UseInMemoryDatabase("Manufacturers");
+                options.UseInMemoryDatabase("Vehicles");
             });
 
             services.AddControllers();

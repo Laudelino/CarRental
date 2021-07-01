@@ -68,7 +68,7 @@ namespace CarRental.API.Vehicles.Tests
         public async Task GetManufacturersReturnsManufacturerUsingInvalidId()
         {
             var options = new DbContextOptionsBuilder<VehiclesDbContext>()
-                .UseInMemoryDatabase(nameof(GetManufacturersReturnsManufacturerUsingValidId))
+                .UseInMemoryDatabase(nameof(GetManufacturersReturnsManufacturerUsingInvalidId))
                 .Options;
             var dbContext = new VehiclesDbContext(options);
 

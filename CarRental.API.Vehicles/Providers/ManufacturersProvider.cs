@@ -2,6 +2,7 @@
 using CarRental.API.Vehicles.DB;
 using CarRental.API.Vehicles.Interfaces;
 using CarRental.API.Vehicles.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -39,14 +40,44 @@ namespace CarRental.API.Vehicles.Providers
             }
         }
 
-        public Task<(bool IsSuccess, IEnumerable<Models.Manufacturer> Manufacturers, string ErrorMessage)> GetManufacturersAsync()
+        public async Task<(bool IsSuccess, IEnumerable<Models.Manufacturer> Manufacturers, string ErrorMessage)> GetManufacturersAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var manufacturers = await dbContext.Manufacturers.ToListAsync();
+                if(manufacturers != null && manufacturers.Any())
+                {
+                    var result = mapper.Map<IEnumerable<DB.Manufacturer>, IEnumerable<Models.Manufacturer>>(manufacturers);
+                    return (true, result, null);
+                }
+                return (false, null, "Not Found");
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
+            }
         }
 
-        public Task<(bool IsSuccess, Models.Manufacturer Manufacturer, string ErrorMessage)> GetManufacturerAsync(int Id)
+        public async Task<(bool IsSuccess, Models.Manufacturer Manufacturer, string ErrorMessage)> GetManufacturerAsync(int Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var manufacturer = await dbContext.Manufacturers.FirstOrDefaultAsync(m => m.Id == Id);
+                
+                if(manufacturer != null)
+                {
+                    var result = mapper.Map<DB.Manufacturer, Models.Manufacturer>(manufacturer);
+                    return (true, result, null);
+                }
+                return (false, null, "Not Found");
+
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
+            }
         }
     }
 }

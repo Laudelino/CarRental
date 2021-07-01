@@ -7,6 +7,7 @@ namespace CarRental.API.Vehicles.DB
 {
     /// <summary>
     /// Model the entity for the Manufacturer - Marca
+    /// Used for database access
     /// </summary>
     public class Manufacturer
     {
