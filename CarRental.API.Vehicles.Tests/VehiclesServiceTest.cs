@@ -8,7 +8,8 @@ namespace CarRental.API.Vehicles.Tests
         [Fact]
         public void GetVehiclesReturnsAllVehicles()
         {
-
+            
         }
+
     }
 }
