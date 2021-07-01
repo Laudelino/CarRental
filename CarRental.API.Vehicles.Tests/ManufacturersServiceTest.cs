@@ -27,14 +27,14 @@ namespace CarRental.API.Vehicles.Tests
             var mapper = new Mapper(config);
             var manufacturersProvider = new ManufacturersProvider(dbContext, null, mapper);
 
-            var manufacuters = await manufacturersProvider.GetManufacturersAsync();
+            var manufacturers = await manufacturersProvider.GetManufacturersAsync();
             
             //Checks if call is returning IsSuccess as status
-            Assert.True(manufacuters.IsSuccess);
+            Assert.True(manufacturers.IsSuccess);
             //Checks if we have any manufacturer
-            Assert.True(manufacuters.Manufacturers.Any());
+            Assert.True(manufacturers.Manufacturers.Any());
             //Checks that there were no errors
-            Assert.Null(manufacuters.ErrorMessage);
+            Assert.Null(manufacturers.ErrorMessage);
         }
 
         [Fact]
@@ -52,16 +52,16 @@ namespace CarRental.API.Vehicles.Tests
             var mapper = new Mapper(config);
             var manufacturersProvider = new ManufacturersProvider(dbContext, null, mapper);
 
-            var manufacuter = await manufacturersProvider.GetManufacturerAsync(1);
+            var manufacturer = await manufacturersProvider.GetManufacturerAsync(1);
 
             //Checks if call is returning IsSuccess as status
-            Assert.True(manufacuter.IsSuccess);
+            Assert.True(manufacturer.IsSuccess);
             //Checks if we got the right Manufacturer
-            Assert.NotNull(manufacuter.Manufacturer);
+            Assert.NotNull(manufacturer.Manufacturer);
             //Checks if we got the right Manufacturer
-            Assert.True(manufacuter.Manufacturer.Id==1);
+            Assert.True(manufacturer.Manufacturer.Id==1);
             //Checks that there were no errors
-            Assert.Null(manufacuter.ErrorMessage);
+            Assert.Null(manufacturer.ErrorMessage);
         }
 
         [Fact]
@@ -79,14 +79,135 @@ namespace CarRental.API.Vehicles.Tests
             var mapper = new Mapper(config);
             var manufacturersProvider = new ManufacturersProvider(dbContext, null, mapper);
 
-            var manufacuter = await manufacturersProvider.GetManufacturerAsync(-100);
+            var manufacturer = await manufacturersProvider.GetManufacturerAsync(-100);
 
             //Checks if call is returning IsSuccess as false, due to the ID not existing
-            Assert.False(manufacuter.IsSuccess);
+            Assert.False(manufacturer.IsSuccess);
             //Checks if the object is null as it should
-            Assert.Null(manufacuter.Manufacturer);
+            Assert.Null(manufacturer.Manufacturer);
             //Checks that we have an error
-            Assert.NotNull(manufacuter.ErrorMessage);
+            Assert.NotNull(manufacturer.ErrorMessage);
+        }
+
+        [Fact]
+        public async Task AddManufacturersReturnsManufacturer()
+        {
+            var options = new DbContextOptionsBuilder<VehiclesDbContext>()
+                .UseInMemoryDatabase(nameof(AddManufacturersReturnsManufacturer))
+                .Options;
+            var dbContext = new VehiclesDbContext(options);
+
+            CreateManufacurers(dbContext);
+
+            var manufacturerProfile = new ManufacturerProfile();
+            var config = new MapperConfiguration(cfg => cfg.AddProfile(manufacturerProfile));
+            var mapper = new Mapper(config);
+            var manufacturersProvider = new ManufacturersProvider(dbContext, null, mapper);
+
+            var newManufacturer = new Models.ManufacturerRequestNew() { Name = Guid.NewGuid().ToString() };
+
+            var manufacturer = await manufacturersProvider.PostManufacturerAsync(newManufacturer);
+
+            
+            Assert.True(manufacturer.IsSuccess);
+            Assert.NotNull(manufacturer.Manufacturer);
+            Assert.True(manufacturer.Manufacturer.Name == newManufacturer.Name);
+            Assert.Null(manufacturer.ErrorMessage);
+        }
+
+        [Fact]
+        public async Task PutValidIdManufacturersReturnsManufacturer()
+        {
+            var options = new DbContextOptionsBuilder<VehiclesDbContext>()
+                .UseInMemoryDatabase(nameof(PutValidIdManufacturersReturnsManufacturer))
+                .Options;
+            var dbContext = new VehiclesDbContext(options);
+
+            //CreateManufacurers(dbContext);
+
+            var manufacturerProfile = new ManufacturerProfile();
+            var config = new MapperConfiguration(cfg => cfg.AddProfile(manufacturerProfile));
+            var mapper = new Mapper(config);
+            var manufacturersProvider = new ManufacturersProvider(dbContext, null, mapper);
+            var allManufacturers = await manufacturersProvider.GetManufacturersAsync();
+
+            var putManufacturer = new Models.ManufacturerRequestUpdate() { Id = allManufacturers.Manufacturers.First().Id, Name = Guid.NewGuid().ToString() };
+
+            var manufacturer = await manufacturersProvider.PutManufacturerAsync(putManufacturer);
+
+            Assert.True(manufacturer.IsSuccess);
+            Assert.NotNull(manufacturer.Manufacturer);
+            Assert.True(manufacturer.Manufacturer.Id == putManufacturer.Id);
+            Assert.True(manufacturer.Manufacturer.Name == putManufacturer.Name);
+            Assert.Null(manufacturer.ErrorMessage);
+        }
+
+        [Fact]
+        public async Task PutInvalidIdManufacturersReturnsManufacturer()
+        {
+            var options = new DbContextOptionsBuilder<VehiclesDbContext>()
+                .UseInMemoryDatabase(nameof(PutInvalidIdManufacturersReturnsManufacturer))
+                .Options;
+            var dbContext = new VehiclesDbContext(options);
+
+            CreateManufacurers(dbContext);
+
+            var manufacturerProfile = new ManufacturerProfile();
+            var config = new MapperConfiguration(cfg => cfg.AddProfile(manufacturerProfile));
+            var mapper = new Mapper(config);
+            var manufacturersProvider = new ManufacturersProvider(dbContext, null, mapper);
+            
+            
+            var putManufacturer = new Models.ManufacturerRequestUpdate() { Id = -100, Name = Guid.NewGuid().ToString() };
+
+            var manufacturer = await manufacturersProvider.PutManufacturerAsync(putManufacturer);
+
+            Assert.False(manufacturer.IsSuccess);
+            Assert.Null(manufacturer.Manufacturer);
+            Assert.NotNull(manufacturer.ErrorMessage);
+        }
+
+        [Fact]
+        public async Task DeleteValidIdManufacturer()
+        {
+            var options = new DbContextOptionsBuilder<VehiclesDbContext>()
+                .UseInMemoryDatabase(nameof(DeleteValidIdManufacturer))
+                .Options;
+            var dbContext = new VehiclesDbContext(options);
+
+            //CreateManufacurers(dbContext);
+
+            var manufacturerProfile = new ManufacturerProfile();
+            var config = new MapperConfiguration(cfg => cfg.AddProfile(manufacturerProfile));
+            var mapper = new Mapper(config);
+            var manufacturersProvider = new ManufacturersProvider(dbContext, null, mapper);
+            var allManufacturers = await manufacturersProvider.GetManufacturersAsync();
+
+            var manufacturer = await manufacturersProvider.DeleteManufacturerAsync(allManufacturers.Manufacturers.First().Id);
+
+            Assert.True(manufacturer.IsSuccess);
+            Assert.Null(manufacturer.ErrorMessage);
+        }
+
+        [Fact]
+        public async Task DeleteInvalidIdManufacturer()
+        {
+            var options = new DbContextOptionsBuilder<VehiclesDbContext>()
+                .UseInMemoryDatabase(nameof(DeleteInvalidIdManufacturer))
+                .Options;
+            var dbContext = new VehiclesDbContext(options);
+
+            CreateManufacurers(dbContext);
+
+            var manufacturerProfile = new ManufacturerProfile();
+            var config = new MapperConfiguration(cfg => cfg.AddProfile(manufacturerProfile));
+            var mapper = new Mapper(config);
+            var manufacturersProvider = new ManufacturersProvider(dbContext, null, mapper);
+
+            var manufacturer = await manufacturersProvider.DeleteManufacturerAsync(-100);
+
+            Assert.False(manufacturer.IsSuccess);
+            Assert.NotNull(manufacturer.ErrorMessage);
         }
 
         private void CreateManufacurers(VehiclesDbContext dbContext)

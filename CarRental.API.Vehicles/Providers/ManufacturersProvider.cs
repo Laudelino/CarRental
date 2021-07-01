@@ -79,5 +79,20 @@ namespace CarRental.API.Vehicles.Providers
                 return (false, null, ex.Message);
             }
         }
+
+        public async Task<(bool IsSuccess, Models.Manufacturer Manufacturer, string ErrorMessage)> PostManufacturerAsync(ManufacturerRequestNew manufacturer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<(bool IsSuccess, Models.Manufacturer Manufacturer, string ErrorMessage)> PutManufacturerAsync(ManufacturerRequestUpdate manufacturer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<(bool IsSuccess, string ErrorMessage)> DeleteManufacturerAsync(int Id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
