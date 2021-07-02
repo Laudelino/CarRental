@@ -32,6 +32,8 @@ namespace CarRental.API.Vehicles
             services.AddScoped<IManufacturersProvider, ManufacturersProvider>();
             services.AddScoped<IVehicleCategoriesProvider, VehicleCategoriesProvider>();
             services.AddScoped<IFuelTypesProvider, FuelTypesProvider>();
+            services.AddScoped<IVehicleModelsProvider, VehicleModelsProvider>();
+            services.AddScoped<IVehiclesProvider, VehiclesProvider>();
 
             services.AddAutoMapper(typeof(Startup));
             services.AddDbContext<VehiclesDbContext>(options =>
@@ -50,6 +52,8 @@ namespace CarRental.API.Vehicles
                     Description = "Vehicles API"
                 });
             });
+
+            this.StartupDB(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,6 +77,18 @@ namespace CarRental.API.Vehicles
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void StartupDB(IServiceCollection services)
+        { 
+            using (var c = (services.BuildServiceProvider()).CreateScope())
+            {
+                var DB = c.ServiceProvider.GetRequiredService<VehiclesDbContext>();
+                
+                DB.Database.EnsureCreated();
+
+                VehiclesDBInit.SeedData(DB);
+            }
         }
     }
 }

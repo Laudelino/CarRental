@@ -88,15 +88,18 @@ namespace CarRental.API.Vehicles.Tests
         }
         private void CreateFuelTypes(VehiclesDbContext dbContext)
         {
-            for (int i = 1; i < 5; i++)
+            if (!dbContext.FuelTypes.Any())
             {
-                dbContext.FuelTypes.Add(new FuelType()
+                for (int i = 1; i < 5; i++)
                 {
-                    Id = i,
-                    Name = Guid.NewGuid().ToString()
-                });
+                    dbContext.FuelTypes.Add(new FuelType()
+                    {
+                        Id = i,
+                        Name = Guid.NewGuid().ToString()
+                    });
+                }
+                dbContext.SaveChanges();
             }
-            dbContext.SaveChanges();
         }
     }
 }

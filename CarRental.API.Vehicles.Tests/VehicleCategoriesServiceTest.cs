@@ -87,15 +87,18 @@ namespace CarRental.API.Vehicles.Tests
         }
         private void CreateVehicleCategories(VehiclesDbContext dbContext)
         {
-            for (int i = 1; i < 5; i++)
+            if (!dbContext.VehicleCategories.Any())
             {
-                dbContext.VehicleCategories.Add(new VehicleCategory()
+                for (int i = 1; i < 5; i++)
                 {
-                    Id = i,
-                    Name = Guid.NewGuid().ToString()
-                });
+                    dbContext.VehicleCategories.Add(new VehicleCategory()
+                    {
+                        Id = i,
+                        Name = Guid.NewGuid().ToString()
+                    });
+                }
+                dbContext.SaveChanges();
             }
-            dbContext.SaveChanges();
         }
     }
 }

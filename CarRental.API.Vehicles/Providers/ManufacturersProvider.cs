@@ -36,7 +36,7 @@ namespace CarRental.API.Vehicles.Providers
                 dbContext.Manufacturers.Add(new DB.Manufacturer() { Id = 1, Name = "Volkswagen" });
                 dbContext.Manufacturers.Add(new DB.Manufacturer() { Id = 2, Name = "Fiat" });
                 dbContext.Manufacturers.Add(new DB.Manufacturer() { Id = 3, Name = "Ford" });
-                dbContext.Manufacturers.Add(new DB.Manufacturer() { Id = 4, Name = "Kia" });
+                dbContext.Manufacturers.Add(new DB.Manufacturer() { Id = 4, Name = "GM" });
                 dbContext.SaveChanges();
             }
         }

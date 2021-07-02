@@ -12,6 +12,8 @@ namespace CarRental.API.Vehicles.Profiles
             CreateMap<DB.Manufacturer, Models.Manufacturer>();
             CreateMap<DB.VehicleCategory, Models.VehicleCategory>();
             CreateMap<DB.FuelType, Models.FuelType>();
+            CreateMap<DB.VehicleModel, Models.VehicleModel>();
+            CreateMap<DB.Vehicle, Models.Vehicle>();
         }
     }
 }

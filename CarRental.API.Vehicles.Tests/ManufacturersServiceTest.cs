@@ -175,7 +175,7 @@ namespace CarRental.API.Vehicles.Tests
                 .Options;
             var dbContext = new VehiclesDbContext(options);
 
-            //CreateManufacurers(dbContext);
+            CreateManufacurers(dbContext);
 
             var manufacturerProfile = new VehicleProfile();
             var config = new MapperConfiguration(cfg => cfg.AddProfile(manufacturerProfile));
@@ -212,15 +212,18 @@ namespace CarRental.API.Vehicles.Tests
 
         private void CreateManufacurers(VehiclesDbContext dbContext)
         {
-            for (int i = 1; i < 5; i++)
+            if (!dbContext.Manufacturers.Any())
             {
-                dbContext.Manufacturers.Add(new Manufacturer()
+                for (int i = 1; i < 5; i++)
                 {
-                    Id = i,
-                    Name = Guid.NewGuid().ToString()
-                });
+                    dbContext.Manufacturers.Add(new Manufacturer()
+                    {
+                        Id = i,
+                        Name = Guid.NewGuid().ToString()
+                    });
+                }
+                dbContext.SaveChanges();
             }
-            dbContext.SaveChanges();
         }
     }
 }

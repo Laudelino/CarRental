@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
-namespace CarRental.API.Vehicles.DB
+namespace CarRental.API.Vehicles.Models
 {
-
-    public class VehicleModel
+    public class VehicleModelRequestNew
     {
-        public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public int ManufacturerId { get; set; }
-        public virtual Manufacturer Manufacturer { get; set; } 
+        [Required]
         public decimal RentalRate { get; set; }
+        [Required] 
         public int FuelTypeId { get; set; }
-        public virtual FuelType FuelType { get; set; }
+        [Required] 
         public int TrunkSize { get; set; }
+        [Required] 
         public int VehicleCategoryId { get; set; }
-        public virtual VehicleCategory VehicleCategory { get; set; }
-
-
     }
 }
