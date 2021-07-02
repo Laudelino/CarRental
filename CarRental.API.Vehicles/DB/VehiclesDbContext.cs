@@ -12,6 +12,9 @@ namespace CarRental.API.Vehicles.DB
     public class VehiclesDbContext : DbContext
     {
         public DbSet<Manufacturer> Manufacturers { get; set; }
+        public DbSet<VehicleCategory> VehicleCategories { get; set; }
+
+        public DbSet<FuelType> FuelTypes { get; set; }
 
         public VehiclesDbContext(DbContextOptions options) : base(options)
         { 

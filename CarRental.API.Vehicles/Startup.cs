@@ -30,6 +30,9 @@ namespace CarRental.API.Vehicles
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IManufacturersProvider, ManufacturersProvider>();
+            services.AddScoped<IVehicleCategoriesProvider, VehicleCategoriesProvider>();
+            services.AddScoped<IFuelTypesProvider, FuelTypesProvider>();
+
             services.AddAutoMapper(typeof(Startup));
             services.AddDbContext<VehiclesDbContext>(options =>
             {

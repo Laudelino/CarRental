@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 
 namespace CarRental.API.Vehicles.Profiles
 {
-    public class ManufacturerProfile : AutoMapper.Profile
+    public class VehicleProfile : AutoMapper.Profile
     {
-        public ManufacturerProfile()
+        public VehicleProfile()
         {
             CreateMap<DB.Manufacturer, Models.Manufacturer>();
+            CreateMap<DB.VehicleCategory, Models.VehicleCategory>();
+            CreateMap<DB.FuelType, Models.FuelType>();
         }
     }
 }

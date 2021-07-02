@@ -22,7 +22,7 @@ namespace CarRental.API.Vehicles.Tests
             
             CreateManufacurers(dbContext);
 
-            var manufacturerProfile = new ManufacturerProfile();
+            var manufacturerProfile = new VehicleProfile();
             var config = new MapperConfiguration(cfg => cfg.AddProfile(manufacturerProfile));
             var mapper = new Mapper(config);
             var manufacturersProvider = new ManufacturersProvider(dbContext, null, mapper);
@@ -47,7 +47,7 @@ namespace CarRental.API.Vehicles.Tests
 
             CreateManufacurers(dbContext);
 
-            var manufacturerProfile = new ManufacturerProfile();
+            var manufacturerProfile = new VehicleProfile();
             var config = new MapperConfiguration(cfg => cfg.AddProfile(manufacturerProfile));
             var mapper = new Mapper(config);
             var manufacturersProvider = new ManufacturersProvider(dbContext, null, mapper);
@@ -74,7 +74,7 @@ namespace CarRental.API.Vehicles.Tests
 
             CreateManufacurers(dbContext);
 
-            var manufacturerProfile = new ManufacturerProfile();
+            var manufacturerProfile = new VehicleProfile();
             var config = new MapperConfiguration(cfg => cfg.AddProfile(manufacturerProfile));
             var mapper = new Mapper(config);
             var manufacturersProvider = new ManufacturersProvider(dbContext, null, mapper);
@@ -99,7 +99,7 @@ namespace CarRental.API.Vehicles.Tests
 
             CreateManufacurers(dbContext);
 
-            var manufacturerProfile = new ManufacturerProfile();
+            var manufacturerProfile = new VehicleProfile();
             var config = new MapperConfiguration(cfg => cfg.AddProfile(manufacturerProfile));
             var mapper = new Mapper(config);
             var manufacturersProvider = new ManufacturersProvider(dbContext, null, mapper);
@@ -125,7 +125,7 @@ namespace CarRental.API.Vehicles.Tests
 
             //CreateManufacurers(dbContext);
 
-            var manufacturerProfile = new ManufacturerProfile();
+            var manufacturerProfile = new VehicleProfile();
             var config = new MapperConfiguration(cfg => cfg.AddProfile(manufacturerProfile));
             var mapper = new Mapper(config);
             var manufacturersProvider = new ManufacturersProvider(dbContext, null, mapper);
@@ -152,7 +152,7 @@ namespace CarRental.API.Vehicles.Tests
 
             CreateManufacurers(dbContext);
 
-            var manufacturerProfile = new ManufacturerProfile();
+            var manufacturerProfile = new VehicleProfile();
             var config = new MapperConfiguration(cfg => cfg.AddProfile(manufacturerProfile));
             var mapper = new Mapper(config);
             var manufacturersProvider = new ManufacturersProvider(dbContext, null, mapper);
@@ -177,7 +177,7 @@ namespace CarRental.API.Vehicles.Tests
 
             //CreateManufacurers(dbContext);
 
-            var manufacturerProfile = new ManufacturerProfile();
+            var manufacturerProfile = new VehicleProfile();
             var config = new MapperConfiguration(cfg => cfg.AddProfile(manufacturerProfile));
             var mapper = new Mapper(config);
             var manufacturersProvider = new ManufacturersProvider(dbContext, null, mapper);
@@ -199,7 +199,7 @@ namespace CarRental.API.Vehicles.Tests
 
             CreateManufacurers(dbContext);
 
-            var manufacturerProfile = new ManufacturerProfile();
+            var manufacturerProfile = new VehicleProfile();
             var config = new MapperConfiguration(cfg => cfg.AddProfile(manufacturerProfile));
             var mapper = new Mapper(config);
             var manufacturersProvider = new ManufacturersProvider(dbContext, null, mapper);
