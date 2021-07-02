@@ -42,5 +42,41 @@ namespace CarRental.API.Vehicles.Controllers
             return NotFound();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> PostManufacturerAsync(Models.ManufacturerRequestNew manufacturer)
+        {
+            var result = await manufacturersProvider.PostManufacturerAsync(manufacturer);
+
+            if(result.IsSuccess)
+            {
+                return Created("", result.Manufacturer);
+            }
+            return BadRequest();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> PutManufacturerAsync(Models.ManufacturerRequestUpdate manufacturer)
+        {
+            var result = await manufacturersProvider.PutManufacturerAsync(manufacturer);
+
+            if (result.IsSuccess)
+            {
+                return NoContent();
+            }
+            return BadRequest();
+        }
+        
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteManufacturerAsync(int id)
+        {
+            var result = await manufacturersProvider.DeleteManufacturerAsync(id);
+
+            if (result.IsSuccess)
+            {
+                return NoContent();
+            }
+            return BadRequest();
+        }
+
     }
 }

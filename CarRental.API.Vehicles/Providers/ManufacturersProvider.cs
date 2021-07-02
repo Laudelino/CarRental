@@ -25,6 +25,7 @@ namespace CarRental.API.Vehicles.Providers
 
             SeedData();
         }
+        
         /// <summary>
         /// Add sample data as we don't have a database
         /// </summary>
@@ -82,17 +83,86 @@ namespace CarRental.API.Vehicles.Providers
 
         public async Task<(bool IsSuccess, Models.Manufacturer Manufacturer, string ErrorMessage)> PostManufacturerAsync(ManufacturerRequestNew manufacturer)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var dbmanufacturer = new DB.Manufacturer() { Name = manufacturer.Name };
+                dbContext.Add(dbmanufacturer);
+
+                var result = await dbContext.SaveChangesAsync();
+
+                if (result > 0)
+                {
+                    var resultmanufacturer = mapper.Map<DB.Manufacturer, Models.Manufacturer>(dbmanufacturer);
+                    return (true, resultmanufacturer, null);
+                }
+                return (false, null, "Failed to create the record");
+
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
+            }
         }
 
         public async Task<(bool IsSuccess, Models.Manufacturer Manufacturer, string ErrorMessage)> PutManufacturerAsync(ManufacturerRequestUpdate manufacturer)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var find = await this.GetManufacturerAsync(manufacturer.Id);
+
+                if(find.IsSuccess)
+                {
+                    var dbmanufacturer = await dbContext.Manufacturers.FirstOrDefaultAsync(c => c.Id == manufacturer.Id);
+                    dbmanufacturer.Name = manufacturer.Name;    
+                    
+                    dbContext.Update(dbmanufacturer);
+
+                    var result = await dbContext.SaveChangesAsync();
+
+                    if (result > 0)
+                    {
+                        var resultmanufacturer = mapper.Map<DB.Manufacturer, Models.Manufacturer>(dbmanufacturer);
+                        return (true, resultmanufacturer, null);
+                    }
+                    return (false, null, "Failed to update the record");
+                }
+                return (false, null, "Failed to find record");
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
+            }
         }
 
         public async Task<(bool IsSuccess, string ErrorMessage)> DeleteManufacturerAsync(int Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var find = await this.GetManufacturerAsync(Id);
+
+                if (find.IsSuccess)
+                {
+                    var dbmanufacturer = await dbContext.Manufacturers.FirstOrDefaultAsync(c => c.Id == Id);
+   
+                    dbContext.Remove(dbmanufacturer);
+
+                    var result = await dbContext.SaveChangesAsync();
+
+                    if (result > 0)
+                    {
+                        return (true, null);
+                    }
+                    return (false, "Failed to delete the record");
+                }
+                return (false, "Failed to find record");
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, ex.Message);
+            }
         }
     }
 }
