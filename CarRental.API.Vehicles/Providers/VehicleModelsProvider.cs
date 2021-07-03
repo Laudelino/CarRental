@@ -26,10 +26,6 @@ namespace CarRental.API.Vehicles.Providers
 
             SeedData();
         }
-
-        /// <summary>
-        /// Add sample data as we don't have a database
-        /// </summary>
         private void SeedData()
         {
             if (!dbContext.VehicleModels.Any())
@@ -43,7 +39,6 @@ namespace CarRental.API.Vehicles.Providers
                 dbContext.SaveChanges();
             }
         }
-
         public async Task<(bool IsSuccess, IEnumerable<Models.VehicleModel> VehicleModels, string ErrorMessage)> GetVehicleModelsAsync()
         {
             try
@@ -76,6 +71,25 @@ namespace CarRental.API.Vehicles.Providers
                 }
                 return (false, null, "Not Found");
 
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
+            }
+        }
+
+        public async Task<(bool IsSuccess, IEnumerable<Models.Vehicle> Vehicles, string ErrorMessage)> GetVehiclesByModelAsync(int id)
+        {
+            try
+            {
+                var vehicles = await dbContext.Vehicles.Include(m => m.VehicleModel).Include(f => f.VehicleModel.FuelType).Include(m => m.VehicleModel.Manufacturer).Include(c => c.VehicleModel.VehicleCategory).Where(m => m.VehicleModel.Id == id).ToListAsync();
+                if (vehicles != null && vehicles.Any())
+                {
+                    var result = mapper.Map<IEnumerable<DB.Vehicle>, IEnumerable<Models.Vehicle>>(vehicles);
+                    return (true, result, null);
+                }
+                return (false, null, "Not Found");
             }
             catch (Exception ex)
             {

@@ -10,6 +10,7 @@ namespace CarRental.API.Vehicles.Interfaces
     {
         Task<(bool IsSuccess, IEnumerable<Manufacturer> Manufacturers, string ErrorMessage)> GetManufacturersAsync();
         Task<(bool IsSuccess, Models.Manufacturer Manufacturer, string ErrorMessage)> GetManufacturerAsync(int Id);
+        Task<(bool IsSuccess, IEnumerable<VehicleModel> VehicleModels, string ErrorMessage)> GetVehicleModelsByManufacturerAsync(int id);
         Task<(bool IsSuccess, Models.Manufacturer Manufacturer, string ErrorMessage)> PostManufacturerAsync(ManufacturerRequestNew manufacturer);
         Task<(bool IsSuccess, Models.Manufacturer Manufacturer, string ErrorMessage)> PutManufacturerAsync(ManufacturerRequestUpdate manufacturer);
         Task<(bool IsSuccess, string ErrorMessage)> DeleteManufacturerAsync(int Id);

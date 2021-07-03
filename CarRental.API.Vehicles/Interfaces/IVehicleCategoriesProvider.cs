@@ -9,6 +9,7 @@ namespace CarRental.API.Vehicles.Interfaces
     public interface IVehicleCategoriesProvider
     {
         Task<(bool IsSuccess, IEnumerable<VehicleCategory> VehicleCategories, string ErrorMessage)> GetVehicleCategoriesAsync();
-        Task<(bool IsSuccess, Models.VehicleCategory VehicleCategory, string ErrorMessage)> GetVehicleCategoryAsync(int Id);
+        Task<(bool IsSuccess, Models.VehicleCategory VehicleCategory, string ErrorMessage)> GetVehicleCategoryAsync(int id);
+        Task<(bool IsSuccess, IEnumerable<VehicleModel> VehicleModels, string ErrorMessage)> GetVehicleModelsByCategoryAsync(int id);
     }
 }

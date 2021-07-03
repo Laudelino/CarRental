@@ -16,7 +16,7 @@ namespace CarRental.API.Vehicles.Tests
         public async Task GetVehiclesReturnsAllVehicles()
         {
             var options = new DbContextOptionsBuilder<VehiclesDbContext>()
-                .UseInMemoryDatabase(nameof(GetVehicleModelsReturnsAllVehicleModels))
+                .UseInMemoryDatabase(nameof(GetVehiclesReturnsAllVehicles))
                 .Options;
             var dbContext = new VehiclesDbContext(options);
 
@@ -40,7 +40,7 @@ namespace CarRental.API.Vehicles.Tests
         public async Task GetVehicleMReturnsVehicleUsingValidId()
         {
             var options = new DbContextOptionsBuilder<VehiclesDbContext>()
-                .UseInMemoryDatabase(nameof(GetVehicleModelsReturnsVehicleModelUsingValidId))
+                .UseInMemoryDatabase(nameof(GetVehicleMReturnsVehicleUsingValidId))
                 .Options;
             var dbContext = new VehiclesDbContext(options);
 
@@ -49,7 +49,7 @@ namespace CarRental.API.Vehicles.Tests
             var modelProfile = new VehicleProfile();
             var config = new MapperConfiguration(cfg => cfg.AddProfile(modelProfile));
             var mapper = new Mapper(config);
-            var vehiclesProvider = new VehicleProvider(dbContext, null, mapper);
+            var vehiclesProvider = new VehiclesProvider(dbContext, null, mapper);
 
             var vehicles = await vehiclesProvider.GetVehicleAsync(1);
 
@@ -65,7 +65,7 @@ namespace CarRental.API.Vehicles.Tests
         public async Task GetVehicleReturnsVehicleUsingInvalidId()
         {
             var options = new DbContextOptionsBuilder<VehiclesDbContext>()
-                .UseInMemoryDatabase(nameof(GetVehicleModelsReturnsVehicleModelUsingInvalidId))
+                .UseInMemoryDatabase(nameof(GetVehicleReturnsVehicleUsingInvalidId))
                 .Options;
             var dbContext = new VehiclesDbContext(options);
 
@@ -76,12 +76,12 @@ namespace CarRental.API.Vehicles.Tests
             var mapper = new Mapper(config);
             var vehiclesProvider = new VehiclesProvider(dbContext, null, mapper);
 
-            var vehicles = await vehiclesProvider.GetVehicleModelAsync(-100);
+            var vehicles = await vehiclesProvider.GetVehicleAsync(-100);
 
             //Checks if call is returning IsSuccess as false, due to the ID not existing
             Assert.False(vehicles.IsSuccess);
             //Checks if the object is null as it should
-            Assert.Null(vehicles.VehicleModel);
+            Assert.Null(vehicles.Vehicle);
             //Checks that we have an error
             Assert.NotNull(vehicles.ErrorMessage);
         }
@@ -90,7 +90,7 @@ namespace CarRental.API.Vehicles.Tests
         public async Task AddVehicleReturnsVehicle()
         {
             var options = new DbContextOptionsBuilder<VehiclesDbContext>()
-                .UseInMemoryDatabase(nameof(AddVehicleModelsReturnsVehicleModel))
+                .UseInMemoryDatabase(nameof(AddVehicleReturnsVehicle))
                 .Options;
             var dbContext = new VehiclesDbContext(options);
 
@@ -104,7 +104,6 @@ namespace CarRental.API.Vehicles.Tests
 
             var newVehicle = new Models.VehicleRequestNew()
             {
-                Id = allVehicles.Vehicles.First().Id,
                 Plate = Guid.NewGuid().ToString(),
                 VehicleModelId = rand.Next(1, 4),
                 Year = rand.Next(2000, 2022),
@@ -114,8 +113,8 @@ namespace CarRental.API.Vehicles.Tests
 
 
             Assert.True(vehicles.IsSuccess);
-            Assert.NotNull(vehicles.VehicleModel);
-            Assert.True(vehicles.VehicleModel.Plate == newVehicle.Plate);
+            Assert.NotNull(vehicles.Vehicle);
+            Assert.True(vehicles.Vehicle.Plate == newVehicle.Plate);
             Assert.Null(vehicles.ErrorMessage);
         }
 
@@ -123,7 +122,7 @@ namespace CarRental.API.Vehicles.Tests
         public async Task PutValidIdVehicleReturnsVehicle()
         {
             var options = new DbContextOptionsBuilder<VehiclesDbContext>()
-                .UseInMemoryDatabase(nameof(PutValidIdVehicleModelsReturnsVehicleModel))
+                .UseInMemoryDatabase(nameof(PutValidIdVehicleReturnsVehicle))
                 .Options;
             var dbContext = new VehiclesDbContext(options);
 
@@ -157,7 +156,7 @@ namespace CarRental.API.Vehicles.Tests
         public async Task PutInvalidIdVehiclesReturnsVehicle()
         {
             var options = new DbContextOptionsBuilder<VehiclesDbContext>()
-                .UseInMemoryDatabase(nameof(PutInvalidIdVehicleModelsReturnsVehicleModel))
+                .UseInMemoryDatabase(nameof(PutInvalidIdVehiclesReturnsVehicle))
                 .Options;
             var dbContext = new VehiclesDbContext(options);
 
@@ -174,7 +173,7 @@ namespace CarRental.API.Vehicles.Tests
             var vehicles = await vehiclesProvider.PutVehicleAsync(putVehicle);
 
             Assert.False(vehicles.IsSuccess);
-            Assert.Null(vehicles.VehicleModel);
+            Assert.Null(vehicles.Vehicle);
             Assert.NotNull(vehicles.ErrorMessage);
         }
 
@@ -182,7 +181,7 @@ namespace CarRental.API.Vehicles.Tests
         public async Task DeleteValidIdVehicle()
         {
             var options = new DbContextOptionsBuilder<VehiclesDbContext>()
-                .UseInMemoryDatabase(nameof(DeleteValidIdVehicleModel))
+                .UseInMemoryDatabase(nameof(DeleteValidIdVehicle))
                 .Options;
             var dbContext = new VehiclesDbContext(options);
 

@@ -41,5 +41,17 @@ namespace CarRental.API.Vehicles.Controllers
             }
             return NotFound();
         }
+
+        [HttpGet("{id}/models")]
+        public async Task<IActionResult> GetVehicleModelsByCategoryAsync(int id)
+        {
+            var result = await vehicleCategoriesProvider.GetVehicleModelsByCategoryAsync(id);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.VehicleModels);
+            }
+            return NotFound();
+        }
     }
 }

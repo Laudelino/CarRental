@@ -2,6 +2,7 @@
 using CarRental.API.Vehicles.DB;
 using CarRental.API.Vehicles.Interfaces;
 using CarRental.API.Vehicles.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -23,10 +24,6 @@ namespace CarRental.API.Vehicles.Providers
 
             SeedData();
         }
-
-        /// <summary>
-        /// Add sample data as we don't have a database
-        /// </summary>
         private void SeedData()
         {
             if (!dbContext.VehicleModels.Any())
@@ -40,30 +37,139 @@ namespace CarRental.API.Vehicles.Providers
                 dbContext.SaveChanges();
             }
         }
-
-        Task<(bool IsSuccess, string ErrorMessage)> IVehiclesProvider.DeleteVehicleAsync(int Id)
+        public async Task<(bool IsSuccess, IEnumerable<Models.Vehicle> Vehicles, string ErrorMessage)> GetVehiclesAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var vehicles = await dbContext.Vehicles.Include(m => m.VehicleModel).Include(f => f.VehicleModel.FuelType).Include(m => m.VehicleModel.Manufacturer).Include(c => c.VehicleModel.VehicleCategory).ToListAsync();
+                if (vehicles != null && vehicles.Any())
+                {
+                    var result = mapper.Map<IEnumerable<DB.Vehicle>, IEnumerable<Models.Vehicle>>(vehicles);
+                    return (true, result, null);
+                }
+                return (false, null, "Not Found");
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
+            }
         }
-
-        Task<(bool IsSuccess, Models.Vehicle Vehicle, string ErrorMessage)> IVehiclesProvider.GetVehicleModelAsync(int Id)
+        public async Task<(bool IsSuccess, Models.Vehicle Vehicle, string ErrorMessage)> GetVehicleAsync(int Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var vehicle = await dbContext.Vehicles.Include(m => m.VehicleModel).Include(f => f.VehicleModel.FuelType).Include(m => m.VehicleModel.Manufacturer).Include(c => c.VehicleModel.VehicleCategory).FirstOrDefaultAsync(m => m.Id == Id);
+
+                if (vehicle != null)
+                {
+                    var result = mapper.Map<DB.Vehicle, Models.Vehicle>(vehicle);
+                    return (true, result, null);
+                }
+                return (false, null, "Not Found");
+
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
+            }
         }
-
-        Task<(bool IsSuccess, IEnumerable<Models.Vehicle> Vehicles, string ErrorMessage)> IVehiclesProvider.GetVehicleModelsAsync()
+        public async Task<(bool IsSuccess, Models.Vehicle Vehicle, string ErrorMessage)> PostVehicleAsync(VehicleRequestNew vehicle)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var dbvehicle = new DB.Vehicle() 
+                { 
+                    Plate = vehicle.Plate,
+                    VehicleModelId = vehicle.VehicleModelId,
+                    Year = vehicle.Year
+                };
+                dbContext.Add(dbvehicle);
+
+                var result = await dbContext.SaveChangesAsync();
+
+                if (result > 0)
+                {
+                    var resultVehicle = await GetVehicleAsync(dbvehicle.Id);
+
+                    if (resultVehicle.IsSuccess)
+                    {
+                        return (true, resultVehicle.Vehicle, null);
+                    }
+                }
+                return (false, null, "Failed to create the record");
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
+            }
         }
-
-        Task<(bool IsSuccess, Models.Vehicle Vehicle, string ErrorMessage)> IVehiclesProvider.PostVehicleModelAsync(VehicleRequestNew vehicle)
+        public async Task<(bool IsSuccess, Models.Vehicle Vehicle, string ErrorMessage)> PutVehicleAsync(VehicleRequestUpdate vehicle)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var find = await this.GetVehicleAsync(vehicle.Id);
+
+                if (find.IsSuccess)
+                {
+                    var dbvehicle = await dbContext.Vehicles.FirstOrDefaultAsync(c => c.Id == vehicle.Id);
+                    
+                    dbvehicle.Plate = vehicle.Plate;
+                    dbvehicle.VehicleModelId = vehicle.VehicleModelId;
+                    dbvehicle.Year = vehicle.Year;
+
+                    dbContext.Update(dbvehicle);
+
+                    var result = await dbContext.SaveChangesAsync();
+
+                    if (result > 0)
+                    {
+                        var resultVehicle = await GetVehicleAsync(dbvehicle.Id);
+
+                        if (resultVehicle.IsSuccess)
+                        {
+                            return (true, resultVehicle.Vehicle, null);
+                        }
+                    }
+                    return (false, null, "Failed to update the record");
+                }
+                return (false, null, "Failed to find record");
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
+            }
         }
-
-        Task<(bool IsSuccess, Models.Vehicle Vehicle, string ErrorMessage)> IVehiclesProvider.PutVehicleModelAsync(VehicleRequestUpdate vehicle)
+        public async Task<(bool IsSuccess, string ErrorMessage)> DeleteVehicleAsync(int Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var find = await this.GetVehicleAsync(Id);
+
+                if (find.IsSuccess)
+                {
+                    var dbvehicle = await dbContext.Vehicles.FirstOrDefaultAsync(c => c.Id == Id);
+
+                    dbContext.Remove(dbvehicle);
+
+                    var result = await dbContext.SaveChangesAsync();
+
+                    if (result > 0)
+                    {
+                        return (true, null);
+                    }
+                    return (false, "Failed to delete the record");
+                }
+                return (false, "Failed to find record");
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, ex.Message);
+            }
         }
     }
 }

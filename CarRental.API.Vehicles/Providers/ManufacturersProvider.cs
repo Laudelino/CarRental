@@ -26,9 +26,6 @@ namespace CarRental.API.Vehicles.Providers
             SeedData();
         }
         
-        /// <summary>
-        /// Add sample data as we don't have a database
-        /// </summary>
         private void SeedData()
         {
             if (!dbContext.Manufacturers.Any())
@@ -80,7 +77,24 @@ namespace CarRental.API.Vehicles.Providers
                 return (false, null, ex.Message);
             }
         }
-
+        public async Task<(bool IsSuccess, IEnumerable<Models.VehicleModel> VehicleModels, string ErrorMessage)> GetVehicleModelsByManufacturerAsync(int id)
+        {
+            try
+            {
+                var vehicleModels = await dbContext.VehicleModels.Include(f => f.FuelType).Include(m => m.Manufacturer).Include(c => c.VehicleCategory).Where(m => m.ManufacturerId == id).ToListAsync();
+                if (vehicleModels != null && vehicleModels.Any())
+                {
+                    var result = mapper.Map<IEnumerable<DB.VehicleModel>, IEnumerable<Models.VehicleModel>>(vehicleModels);
+                    return (true, result, null);
+                }
+                return (false, null, "Not Found");
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
+            }
+        }
         public async Task<(bool IsSuccess, Models.Manufacturer Manufacturer, string ErrorMessage)> PostManufacturerAsync(ManufacturerRequestNew manufacturer)
         {
             try

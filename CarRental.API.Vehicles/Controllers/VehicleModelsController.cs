@@ -42,6 +42,17 @@ namespace CarRental.API.Vehicles.Controllers
             return NotFound();
         }
 
+        [HttpGet("{id}/vehicles")]
+        public async Task<IActionResult> GetVehiclesByModelAsync(int id)
+        {
+            var result = await vehicleModelsProvider.GetVehiclesByModelAsync(id);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Vehicles);
+            }
+            return NotFound();
+        }
         [HttpPost]
         public async Task<IActionResult> PostVehicleModelAsync(Models.VehicleModelRequestNew vehicleModel)
         {
