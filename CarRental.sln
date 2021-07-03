@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarRental.API.Vehicles.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRental.API.Gateway", "CarRental.API.Gateway\CarRental.API.Gateway.csproj", "{99EB785E-D739-4407-A165-CE3B2EE2CB50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRental.API.Person", "CarRental.API.Person\CarRental.API.Person.csproj", "{018C19A2-CDD3-4936-88D2-39D09DAE8FEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRental.API.Person.Tests", "CarRental.API.Person.Tests\CarRental.API.Person.Tests.csproj", "{5FDBA534-32A8-4E85-97C5-2AF06F88B63A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{99EB785E-D739-4407-A165-CE3B2EE2CB50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99EB785E-D739-4407-A165-CE3B2EE2CB50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99EB785E-D739-4407-A165-CE3B2EE2CB50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{018C19A2-CDD3-4936-88D2-39D09DAE8FEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{018C19A2-CDD3-4936-88D2-39D09DAE8FEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{018C19A2-CDD3-4936-88D2-39D09DAE8FEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{018C19A2-CDD3-4936-88D2-39D09DAE8FEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FDBA534-32A8-4E85-97C5-2AF06F88B63A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FDBA534-32A8-4E85-97C5-2AF06F88B63A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FDBA534-32A8-4E85-97C5-2AF06F88B63A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FDBA534-32A8-4E85-97C5-2AF06F88B63A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
