@@ -42,12 +42,13 @@ namespace CarRental.API.Vehicles.DB
             }
             if (!dbContext.Vehicles.Any())
             {
-                dbContext.Vehicles.Add(new DB.Vehicle() { Id = 1, Plate = "ABC-1234", VehicleModelId = 1, Year = 2022 });
-                dbContext.Vehicles.Add(new DB.Vehicle() { Id = 2, Plate = "DEF-5678", VehicleModelId = 2, Year = 2010 });
-                dbContext.Vehicles.Add(new DB.Vehicle() { Id = 3, Plate = "GHI-9012", VehicleModelId = 3, Year = 2020 });
-                dbContext.Vehicles.Add(new DB.Vehicle() { Id = 4, Plate = "BRA2E19", VehicleModelId = 4, Year = 2021 });
-                dbContext.Vehicles.Add(new DB.Vehicle() { Id = 5, Plate = "QTP5F71", VehicleModelId = 5, Year = 2018 });
-                dbContext.Vehicles.Add(new DB.Vehicle() { Id = 6, Plate = "MSK9B10", VehicleModelId = 6, Year = 2019 });
+                dbContext.Vehicles.Add(new DB.Vehicle() { Id = 1, Plate = "ABC-1234", VehicleModelId = 1, Year = 2022, IsReserved = true });
+                dbContext.Vehicles.Add(new DB.Vehicle() { Id = 2, Plate = "DEF-5678", VehicleModelId = 2, Year = 2010, IsReserved = false });
+                dbContext.Vehicles.Add(new DB.Vehicle() { Id = 3, Plate = "GHI-9012", VehicleModelId = 3, Year = 2020, IsReserved = true });
+                dbContext.Vehicles.Add(new DB.Vehicle() { Id = 4, Plate = "BRA2E19", VehicleModelId = 4, Year = 2021, IsReserved = false });
+                dbContext.Vehicles.Add(new DB.Vehicle() { Id = 5, Plate = "QTP5F71", VehicleModelId = 5, Year = 2018, IsReserved = false });
+                dbContext.Vehicles.Add(new DB.Vehicle() { Id = 6, Plate = "MSK9B10", VehicleModelId = 6, Year = 2019, IsReserved = false });
+                dbContext.Vehicles.Add(new DB.Vehicle() { Id = 7, Plate = "JKL-1023", VehicleModelId = 3, Year = 2020, IsReserved = false });
                 dbContext.SaveChanges();
             }
         }

@@ -29,7 +29,7 @@ namespace CarRental.API.Person.Controllers
             }
             return BadRequest();
         }
-        [HttpGet]
+        [HttpGet("{cpf}")]
         public async Task<IActionResult> GetCustomer(string cpf)
         {
             var result = await customerProvider.GetCustomer(cpf);

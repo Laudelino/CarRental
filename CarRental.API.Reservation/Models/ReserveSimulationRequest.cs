@@ -14,9 +14,5 @@ namespace CarRental.API.Reservation.Models
         public DateTime ReservationStart { get; set; }
         [Required] 
         public DateTime ReservationEnd { get; set; }
-        [Required] 
-        public decimal RentalRate { get; set; }
-        [Required] 
-        public decimal EstimatedTotal { get; set; }
     }
 }

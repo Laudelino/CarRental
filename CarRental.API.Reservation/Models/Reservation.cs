@@ -9,7 +9,7 @@ namespace CarRental.API.Reservation.Models
     {
         public int Id { get; set; }
         public int VehicleId { get; set; }
-        public int CustomerId { get; set; }
+        public string CustomerCPF { get; set; }
         public DateTime ReservationStart { get; set; }
         public DateTime ReservationEnd { get; set; }
         public decimal RentalRate { get; set; }

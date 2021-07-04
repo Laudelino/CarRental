@@ -28,7 +28,7 @@ namespace CarRental.API.Reservation.Controllers
             }
             return NotFound();
         }
-        [HttpPost("{id}/cancel")]
+        [HttpPut("{id}/cancel")]
         public async Task<IActionResult> CancelReservationAsync(int id)
         {
             var result = await reservationProvider.CancelReservationAsync(id);
@@ -50,10 +50,10 @@ namespace CarRental.API.Reservation.Controllers
             }
             return BadRequest();
         }
-        [HttpPost("return")]
-        public async Task<IActionResult> PostReservationReturnAsync(Models.ReservationReturn reservationReturn)
+        [HttpPut("return")]
+        public async Task<IActionResult> PutReservationReturnAsync(Models.ReservationReturn reservationReturn)
         {
-            var result = await reservationProvider.PostReservationReturnAsync(reservationReturn);
+            var result = await reservationProvider.PutReservationReturnAsync(reservationReturn);
 
             if (result.IsSuccess)
             {
@@ -73,7 +73,7 @@ namespace CarRental.API.Reservation.Controllers
             return BadRequest();
         }
         [HttpPost("simulation")]
-        public async Task<IActionResult> PostReservationReturnAsync(Models.ReserveSimulationRequest simulationRequest)
+        public async Task<IActionResult> PostReserveSimulationAsync(Models.ReserveSimulationRequest simulationRequest)
         {
             var result = await reservationProvider.PostReserveSimulationAsync(simulationRequest);
 
@@ -83,6 +83,16 @@ namespace CarRental.API.Reservation.Controllers
             }
             return BadRequest();
         }
+        [HttpGet("VehicleAvailablity/{VehicleId}")]
+        public async Task<IActionResult> GetVehicleAvailabilityAsync(int VehicleId)
+        {
+            var result = await reservationProvider.GetVehicleAvailabilityAsync(VehicleId);
 
+            if (result.IsSuccess)
+            {
+                return Ok(result.VehicleAvailability);
+            }
+            return NotFound();
+        }
     }
 }

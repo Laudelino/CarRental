@@ -5,12 +5,9 @@ using System.Threading.Tasks;
 
 namespace CarRental.API.Vehicles.Models
 {
-    public class Vehicle
+    public class VehicleReserveRequest
     {
         public int Id { get; set; }
-        public string Plate { get; set; }
-        public virtual VehicleModel VehicleModel { get; set; }
-        public int Year { get; set; }
         public bool IsReserved { get; set; }
     }
 }

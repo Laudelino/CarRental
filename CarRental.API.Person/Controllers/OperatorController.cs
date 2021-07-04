@@ -31,7 +31,7 @@ namespace CarRental.API.Person.Controllers
             }
             return BadRequest();
         }
-        [HttpGet]
+        [HttpGet("{registrationNumber}")]
         public async Task<IActionResult> GetOperator(string registrationNumber)
         {
             var result = await operatorProvider.GetOperator(registrationNumber);

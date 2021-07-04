@@ -13,7 +13,7 @@ namespace CarRental.API.Reservation.Models
         [Required] 
         public int VehicleId { get; set; }
         [Required] 
-        public int CustomerId { get; set; }
+        public string CustomerCPF { get; set; }
         [Required] 
         public DateTime ReservationStart { get; set; }
         [Required] 
@@ -22,5 +22,18 @@ namespace CarRental.API.Reservation.Models
         public decimal RentalRate { get; set; }
         [Required] 
         public decimal EstimatedTotal { get; set; }
+        [Required]
+        public DateTime ReturnDate { get; set; }
+        [Required] 
+        public decimal ReturnTotal { get; set; }
+        [Required] 
+        public bool IsClean { get; set; }
+        [Required] 
+        public bool HasFullTank { get; set; }
+        [Required] 
+        public bool HasScratches { get; set; }
+        [Required] 
+        public bool HasDents { get; set; }
+        public string Status { get; set; }
     }
 }

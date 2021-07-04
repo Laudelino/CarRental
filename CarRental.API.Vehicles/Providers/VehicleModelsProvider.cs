@@ -97,7 +97,26 @@ namespace CarRental.API.Vehicles.Providers
                 return (false, null, ex.Message);
             }
         }
+        public async Task<(bool IsSuccess, IEnumerable<Models.VehicleModel> VehicleModels, string ErrorMessage)> GetModelWithAvailableVehiclesAsync()
+        {
+            try
+            {
+                var vehicles = await dbContext.Vehicles.Include(m => m.VehicleModel).Include(f => f.VehicleModel.FuelType).Include(m => m.VehicleModel.Manufacturer).Include(c => c.VehicleModel.VehicleCategory).Where(v => v.IsReserved == false).ToListAsync();
+                var vehicleModels = vehicles.Select(v => v.VehicleModel).ToList().Distinct();
 
+                if (vehicleModels != null && vehicleModels.Any())
+                {
+                    var result = mapper.Map<IEnumerable<DB.VehicleModel>, IEnumerable<Models.VehicleModel>>(vehicleModels);
+                    return (true, result, null);
+                }
+                return (false, null, "Not Found");
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
+            }
+        }
         public async Task<(bool IsSuccess, Models.VehicleModel VehicleModel, string ErrorMessage)> PostVehicleModelAsync(VehicleModelRequestNew vehiclemodel)
         {
             try

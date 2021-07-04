@@ -14,5 +14,6 @@ namespace CarRental.API.Vehicles.Interfaces
         Task<(bool IsSuccess, VehicleModel VehicleModel, string ErrorMessage)> PostVehicleModelAsync(VehicleModelRequestNew vehiclemodel);
         Task<(bool IsSuccess, VehicleModel VehicleModel, string ErrorMessage)> PutVehicleModelAsync(VehicleModelRequestUpdate vehiclemodel);
         Task<(bool IsSuccess, string ErrorMessage)> DeleteVehicleModelAsync(int Id);
+        Task<(bool IsSuccess, IEnumerable<Models.VehicleModel> VehicleModels, string ErrorMessage)> GetModelWithAvailableVehiclesAsync();
     }
 }

@@ -11,7 +11,7 @@ namespace CarRental.API.Reservation.Models
         [Required]
         public int ModelId { get; set; }
         [Required] 
-        public int CustomerId { get; set; }
+        public string CustomerCPF { get; set; }
         [Required] 
         public DateTime ReservationStart { get; set; }
         [Required] 

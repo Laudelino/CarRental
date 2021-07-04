@@ -13,5 +13,7 @@ namespace CarRental.API.Vehicles.Interfaces
         Task<(bool IsSuccess, Vehicle Vehicle, string ErrorMessage)> PostVehicleAsync(VehicleRequestNew vehicle);
         Task<(bool IsSuccess, Vehicle Vehicle, string ErrorMessage)> PutVehicleAsync(VehicleRequestUpdate vehicle);
         Task<(bool IsSuccess, string ErrorMessage)> DeleteVehicleAsync(int Id);
+        Task<(bool IsSuccess, Vehicle Vehicle, string ErrorMessage)> PutChangeReserveVehicleAsync(VehicleReserveRequest reserveRequest);
+        Task<(bool IsSuccess, Models.Vehicle Vehicle, string ErrorMessage)> PutReserveVehicleByModelAsync(int id);
     }
 }

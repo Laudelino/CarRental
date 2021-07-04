@@ -13,8 +13,6 @@ namespace CarRental.API.Reservation.Models
         [Required] 
         public DateTime ReturnDate { get; set; }
         [Required] 
-        public decimal ReturnTotal { get; set; }
-        [Required] 
         public bool IsClean { get; set; }
         [Required] 
         public bool HasFullTank { get; set; }

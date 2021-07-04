@@ -78,6 +78,18 @@ namespace CarRental.API.Vehicles.Controllers
             }
             return BadRequest();
         }
+       
+        [HttpPut("/reserve")]
+        public async Task<IActionResult> PutChangeReserveVehicleAsync(Models.VehicleReserveRequest reserveRequest)
+        {
+            var result = await vehiclesProvider.PutChangeReserveVehicleAsync(reserveRequest);
+
+            if (result.IsSuccess)
+            {
+                return NoContent();
+            }
+            return BadRequest();
+        }
 
     }
 }

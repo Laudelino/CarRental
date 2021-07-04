@@ -49,6 +49,13 @@ namespace CarRental.API.Reservation
                     Description = "Reservations API"
                 });
             });
+
+            services.AddHttpClient("CarRentalAPI", c =>
+            {
+                c.BaseAddress = new Uri("https://apicarrental.azurewebsites.net/api/");
+            });
+
+            this.StartupDB(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,6 +79,17 @@ namespace CarRental.API.Reservation
             {
                 endpoints.MapControllers();
             });
+        }
+        private void StartupDB(IServiceCollection services)
+        {
+            using (var c = (services.BuildServiceProvider()).CreateScope())
+            {
+                var DB = c.ServiceProvider.GetRequiredService<ReservationsDbContext>();
+
+                DB.Database.EnsureCreated();
+
+                ReservationsDBInit.SeedData(DB);
+            }
         }
     }
 }

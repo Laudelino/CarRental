@@ -12,10 +12,12 @@ namespace CarRental.API.Vehicles.Controllers
     public class VehicleModelsController : ControllerBase
     {
         private readonly IVehicleModelsProvider vehicleModelsProvider;
+        private readonly IVehiclesProvider vehiclesProvider;
 
-        public VehicleModelsController(IVehicleModelsProvider vehicleModelsProvider)
+        public VehicleModelsController(IVehicleModelsProvider vehicleModelsProvider, IVehiclesProvider vehiclesProvider)
         {
             this.vehicleModelsProvider = vehicleModelsProvider;
+            this.vehiclesProvider = vehiclesProvider;
         }
 
         [HttpGet]
@@ -29,7 +31,17 @@ namespace CarRental.API.Vehicles.Controllers
             }
             return NotFound();
         }
+        [HttpGet("/available")]
+        public async Task<IActionResult> GetModelWithAvailableVehiclesAsync()
+        {
+            var result = await vehicleModelsProvider.GetModelWithAvailableVehiclesAsync();
 
+            if (result.IsSuccess)
+            {
+                return Ok(result.VehicleModels);
+            }
+            return NotFound();
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetVehicleModelAsync(int id)
         {
@@ -76,7 +88,19 @@ namespace CarRental.API.Vehicles.Controllers
             }
             return BadRequest();
         }
+        
+        [HttpPut("{id}/reserve")]
+        public async Task<IActionResult> PutReserveVehicleByModelAsync(int id)
+        {
+            var result = await vehiclesProvider.PutReserveVehicleByModelAsync(id);
 
+            if (result.IsSuccess)
+            {
+                return Ok(result.Vehicle);
+            }
+            return BadRequest();
+        }
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVehicleModelAsync(int id)
         {

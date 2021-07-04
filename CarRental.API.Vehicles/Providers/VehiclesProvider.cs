@@ -16,6 +16,7 @@ namespace CarRental.API.Vehicles.Providers
         private readonly VehiclesDbContext dbContext;
         private readonly ILogger<VehiclesProvider> logger;
         private readonly IMapper mapper;
+
         public VehiclesProvider(VehiclesDbContext dBContext, ILogger<VehiclesProvider> logger, IMapper mapper)
         {
             this.dbContext = dBContext;
@@ -42,6 +43,24 @@ namespace CarRental.API.Vehicles.Providers
             try
             {
                 var vehicles = await dbContext.Vehicles.Include(m => m.VehicleModel).Include(f => f.VehicleModel.FuelType).Include(m => m.VehicleModel.Manufacturer).Include(c => c.VehicleModel.VehicleCategory).ToListAsync();
+                if (vehicles != null && vehicles.Any())
+                {
+                    var result = mapper.Map<IEnumerable<DB.Vehicle>, IEnumerable<Models.Vehicle>>(vehicles);
+                    return (true, result, null);
+                }
+                return (false, null, "Not Found");
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
+            }
+        }
+        public async Task<(bool IsSuccess, IEnumerable<Models.Vehicle> Vehicles, string ErrorMessage)> GetVehiclesNotReservedAsync()
+        {
+            try
+            {
+                var vehicles = await dbContext.Vehicles.Include(m => m.VehicleModel).Include(f => f.VehicleModel.FuelType).Include(m => m.VehicleModel.Manufacturer).Include(c => c.VehicleModel.VehicleCategory).Where(r => r.IsReserved == false).ToListAsync();
                 if (vehicles != null && vehicles.Any())
                 {
                     var result = mapper.Map<IEnumerable<DB.Vehicle>, IEnumerable<Models.Vehicle>>(vehicles);
@@ -169,6 +188,79 @@ namespace CarRental.API.Vehicles.Providers
             {
                 logger?.LogError(ex.ToString());
                 return (false, ex.Message);
+            }
+        }
+        public async Task<(bool IsSuccess, Models.Vehicle Vehicle, string ErrorMessage)> PutChangeReserveVehicleAsync(VehicleReserveRequest reserveRequest)
+        {
+            try
+            {
+                var find = await this.GetVehicleAsync(reserveRequest.Id);
+
+                if(!find.IsSuccess)
+                    return (false, null, "Failed to find record");
+
+                if (find.IsSuccess)
+                {
+                    var dbvehicle = await dbContext.Vehicles.FirstOrDefaultAsync(c => c.Id == reserveRequest.Id);
+
+                    dbvehicle.IsReserved = reserveRequest.IsReserved;
+
+                    dbContext.Update(dbvehicle);
+
+                    var result = await dbContext.SaveChangesAsync();
+
+                    if (result > 0)
+                    {
+                        var resultVehicle = await GetVehicleAsync(dbvehicle.Id);
+
+                        if (resultVehicle.IsSuccess)
+                        {
+                            return (true, resultVehicle.Vehicle, null);
+                        }
+                    }
+                    return (false, null, "Failed to update the record");
+                }
+                return (false, null, "Failed to find record");
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
+            }
+        }
+        public async Task<(bool IsSuccess, Models.Vehicle Vehicle, string ErrorMessage)> PutReserveVehicleByModelAsync(int id)
+        {
+            try
+            {
+                var vehicle = await dbContext.Vehicles.Include(m => m.VehicleModel).Include(f => f.VehicleModel.FuelType).Include(m => m.VehicleModel.Manufacturer).Include(c => c.VehicleModel.VehicleCategory).Where(m => m.VehicleModel.Id == id).Where(v => v.IsReserved == false).FirstOrDefaultAsync();
+
+                if (vehicle != null)
+                {
+                    var dbvehicle = await dbContext.Vehicles.FirstOrDefaultAsync(c => c.Id == vehicle.Id);
+
+                    dbvehicle.IsReserved = true;
+
+                    dbContext.Update(dbvehicle);
+
+                    var result = await dbContext.SaveChangesAsync();
+
+                    if (result > 0)
+                    {
+                        var resultVehicle = await GetVehicleAsync(dbvehicle.Id);
+
+                        if (resultVehicle.IsSuccess)
+                        {
+                            return (true, resultVehicle.Vehicle, null);
+                        }
+                    }
+                    return (false, null, "Failed to update the record");
+                }
+                return (false, null, "Failed to find record");
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
             }
         }
     }
