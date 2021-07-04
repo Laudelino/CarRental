@@ -16,6 +16,6 @@ namespace CarRental.API.Reservation.Interfaces
         Task<(bool IsSuccess, Models.Reservation Reservation, string ErrorMessage)> GetReservationAsync(int id);
         Task<(bool IsSuccess, IEnumerable<Models.Reservation> Reservations, string ErrorMessage)> GetReservationByCustomerAsync(string CustomerCPF);
         Task<(bool IsSuccess, VehicleAvailability VehicleAvailability, string ErrorMessage)> GetVehicleAvailabilityAsync(int vehicleId);
-
+        Task<(bool IsSuccess, string ReservationContract, string ErrorMessage)> GetReservationContractAsync(int id);
     }
 }

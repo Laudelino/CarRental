@@ -103,6 +103,44 @@ namespace CarRental.API.Reservation.Providers
                 return (false, null, ex.Message);
             }
         }
+        public async Task<(bool IsSuccess, string ReservationContract, string ErrorMessage)> GetReservationContractAsync(int id)
+        {
+            try
+            {
+                var reservation = await dbContext.Reservations.FirstOrDefaultAsync(r => r.Id == id);
+
+                if (reservation != null)
+                {
+                    var vehicle = await this.GetVehicleAsync(reservation.VehicleId);
+                    if(!vehicle.IsSuccess)
+                        return (false, null, "Not able to generate the contract");
+
+                    var customer = await this.ValidateCustomer(reservation.CustomerCPF);
+                    if (!customer.IsSuccess)
+                        return (false, null, "Not able to generate the contract");
+
+                    var result = mapper.Map<DB.Reservation, Models.Reservation>(reservation);
+
+                    string reservationContract =
+                        $"Contrato de Aluguel de Veiculo\n\n" +
+                        $"Locatario: {customer.Customer.Name}, portador do CPF {customer.Customer.CPF}\n\n" +
+                        $"Veículo alugado de modelo {vehicle.Vehicle.VehicleModel.Name}, ano {vehicle.Vehicle.Year} e placa {vehicle.Vehicle.Plate}\n\n" +
+                        $"Reserva do veiculo com inicio em {reservation.ReservationStart} e fim em {reservation.ReservationEnd}\n\n" +
+                        $"Reserva tem um valor total estimado de {reservation.EstimatedTotal}\n\n" +
+                        $"Um adicional de 30% ao valor será adicionado a cada ocorrência de carro não limpo, tanque de combustivél não cheio, amassados e arranhões a ser avaliado no check-list de devolução do veículo";
+
+
+                    return (true, reservationContract, null);
+                }
+                return (false, null, "Not Found");
+
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
+            }
+        }
         public async Task<(bool IsSuccess, IEnumerable<Models.Reservation> Reservations, string ErrorMessage)> GetReservationByCustomerAsync(string CustomerCPF)
         {
             try
@@ -435,6 +473,28 @@ namespace CarRental.API.Reservation.Providers
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 
                 var response = await client.PutAsync($"vehicles/reserve", byteContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsByteArrayAsync();
+                    var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+                    var vehicle = JsonSerializer.Deserialize<Vehicle>(content, options);
+                    return (true, vehicle, null);
+                }
+                return (false, null, "Internal error");
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex.ToString());
+                return (false, null, ex.Message);
+            }
+        }
+        private async Task<(bool IsSuccess, Vehicle Vehicle, string ErrorMessage)> GetVehicleAsync(int VehicleId)
+        {
+            try
+            {
+                var client = _clientFactory.CreateClient("CarRentalAPI");
+                var response = await client.GetAsync($"vehicles/{VehicleId}");
 
                 if (response.IsSuccessStatusCode)
                 {

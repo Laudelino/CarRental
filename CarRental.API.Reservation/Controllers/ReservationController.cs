@@ -4,6 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
 
 namespace CarRental.API.Reservation.Controllers
 {
@@ -27,6 +31,38 @@ namespace CarRental.API.Reservation.Controllers
                 return Ok(result.Reservation);
             }
             return NotFound();
+        }
+        [HttpGet("{id}/contract")]
+        public async Task<IActionResult> GetReservationContractAsync(int id)
+        {
+            try
+            {
+                var result = await reservationProvider.GetReservationContractAsync(id);
+
+                if (result.IsSuccess)
+                {
+                    
+                    var workStream = new MemoryStream();
+                    using (var pdfWriter = new PdfWriter(workStream))
+                    {
+                        pdfWriter.SetCloseStream(false);
+                        using (var pdfdocument = new PdfDocument(pdfWriter))
+                        {
+                            var document = new Document(pdfdocument);
+                            document.Add(new Paragraph(result.ReservationContract));
+                        }
+                    }
+
+                    workStream.Position = 0;
+                    return new FileStreamResult(workStream, "application/pdf");
+                }
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+            
         }
         [HttpPut("{id}/cancel")]
         public async Task<IActionResult> CancelReservationAsync(int id)
