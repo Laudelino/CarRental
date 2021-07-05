@@ -8,6 +8,7 @@ using System.IO;
 using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarRental.API.Reservation.Controllers
 {
@@ -56,7 +57,7 @@ namespace CarRental.API.Reservation.Controllers
                     workStream.Position = 0;
                     return new FileStreamResult(workStream, "application/pdf");
                 }
-                return NotFound();
+                return NotFound(result.ErrorMessage);
             }
             catch (Exception ex)
             {
@@ -65,6 +66,7 @@ namespace CarRental.API.Reservation.Controllers
             
         }
         [HttpPut("{id}/cancel")]
+        [Authorize]
         public async Task<IActionResult> CancelReservationAsync(int id)
         {
             var result = await reservationProvider.CancelReservationAsync(id);
@@ -76,6 +78,7 @@ namespace CarRental.API.Reservation.Controllers
             return NotFound();
         }
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PostReserveAsync(Models.ReserveRequest reserveRequest)
         {
             var result = await reservationProvider.PostReserveAsync(reserveRequest);
@@ -87,6 +90,7 @@ namespace CarRental.API.Reservation.Controllers
             return BadRequest();
         }
         [HttpPut("return")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> PutReservationReturnAsync(Models.ReservationReturn reservationReturn)
         {
             var result = await reservationProvider.PutReservationReturnAsync(reservationReturn);
@@ -98,7 +102,8 @@ namespace CarRental.API.Reservation.Controllers
             return BadRequest();
         }
         [HttpPut]
-        public async Task<IActionResult> PutManufacturerAsync(Models.ReservationRequestUpdate reservation)
+        [Authorize]
+        public async Task<IActionResult> PutReservationAsync(Models.ReservationRequestUpdate reservation)
         {
             var result = await reservationProvider.PutReservationAsync(reservation);
 
@@ -109,6 +114,7 @@ namespace CarRental.API.Reservation.Controllers
             return BadRequest();
         }
         [HttpPost("simulation")]
+        [Authorize]
         public async Task<IActionResult> PostReserveSimulationAsync(Models.ReserveSimulationRequest simulationRequest)
         {
             var result = await reservationProvider.PostReserveSimulationAsync(simulationRequest);

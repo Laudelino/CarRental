@@ -13,6 +13,18 @@
       "UpstreamHttpMethod": [ "POST", "PUT", "GET", "DELETE", "OPTIONS" ]
     },
     {
+      "DownstreamPathTemplate": "/api/vehicles",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "carrentalapivehicles.azurewebsites.net",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/vehicles",
+      "UpstreamHttpMethod": [ "POST", "PUT", "GET", "DELETE", "OPTIONS" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/models/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -25,6 +37,18 @@
       "UpstreamHttpMethod": [ "POST", "PUT", "GET", "DELETE", "OPTIONS" ]
     },
     {
+      "DownstreamPathTemplate": "/api/models",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "carrentalapivehicles.azurewebsites.net",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/models",
+      "UpstreamHttpMethod": [ "POST", "PUT", "GET", "DELETE", "OPTIONS" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/vehiclecategories/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -34,6 +58,18 @@
         }
       ],
       "UpstreamPathTemplate": "/api/vehiclecategories/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "GET", "DELETE", "OPTIONS" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/vehiclecategories",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "carrentalapivehicles.azurewebsites.net",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/vehiclecategories",
       "UpstreamHttpMethod": [ "POST", "PUT", "GET", "DELETE", "OPTIONS" ]
     },
     {
@@ -70,6 +106,18 @@
         }
       ],
       "UpstreamPathTemplate": "/api/fueltypes/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "GET", "DELETE", "OPTIONS" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/fueltypes",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "carrentalapivehicles.azurewebsites.net",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/fueltypes",
       "UpstreamHttpMethod": [ "POST", "PUT", "GET", "DELETE", "OPTIONS" ]
     },
     {

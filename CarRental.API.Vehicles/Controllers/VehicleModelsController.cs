@@ -1,4 +1,5 @@
 ﻿using CarRental.API.Vehicles.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -66,6 +67,7 @@ namespace CarRental.API.Vehicles.Controllers
             return NotFound();
         }
         [HttpPost]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> PostVehicleModelAsync(Models.VehicleModelRequestNew vehicleModel)
         {
             var result = await vehicleModelsProvider.PostVehicleModelAsync(vehicleModel);
@@ -78,6 +80,7 @@ namespace CarRental.API.Vehicles.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> PutVehicleModelAsync(Models.VehicleModelRequestUpdate vehicleModel)
         {
             var result = await vehicleModelsProvider.PutVehicleModelAsync(vehicleModel);
@@ -102,6 +105,7 @@ namespace CarRental.API.Vehicles.Controllers
         }
         
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> DeleteVehicleModelAsync(int id)
         {
             var result = await vehicleModelsProvider.DeleteVehicleModelAsync(id);

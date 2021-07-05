@@ -20,7 +20,7 @@ namespace CarRental.API.Person.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> RegisterOperator(Models.OperatorRegister oper)
         {
             var result = await operatorProvider.RegisterOperator(oper);
@@ -32,6 +32,7 @@ namespace CarRental.API.Person.Controllers
             return BadRequest();
         }
         [HttpGet("{registrationNumber}")]
+        [Authorize]
         public async Task<IActionResult> GetOperator(string registrationNumber)
         {
             var result = await operatorProvider.GetOperator(registrationNumber);
