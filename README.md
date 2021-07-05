@@ -9,7 +9,7 @@ Vehicles: responsável pelo CRUD de veículos, marcas, modelos e categorias de v
 Person: responsável pelo CRUD de usuarios, clientes e operadores. Em uma aplicação expandida, esse serviço seria quebrado em três serviços com atribuições especificas
 Reservation: responsável por gerenciar reservas, fazer o retorno dos veículos, gerar contrato.
 
-##Tecnologias
+## Tecnologias
 
 Entity Framework foi usado por ser um framework que conheço e já usei. Nesse projeto, usou-se uma in-memory database, para facilitar o desenvolvimento.
 
