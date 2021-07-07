@@ -150,6 +150,12 @@ namespace CarRental.API.Reservation.Providers
                 if (reservations != null)
                 {
                     var result = mapper.Map< IEnumerable<DB.Reservation>, IEnumerable< Models.Reservation>>(reservations);
+                    foreach(Models.Reservation r in result)
+                    {
+                        var v = await this.GetVehicleAsync(r.VehicleId);
+                        if (v.IsSuccess)
+                            r.Vehicle = v.Vehicle;
+                    }
                     return (true, result, null);
                 }
                 return (false, null, "Not Found");

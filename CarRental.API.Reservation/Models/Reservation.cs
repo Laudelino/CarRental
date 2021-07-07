@@ -23,5 +23,7 @@ namespace CarRental.API.Reservation.Models
         public bool HasDents { get; set; }
 
         public string Status { get; set; }
+
+        public virtual Vehicle Vehicle { get; set; }
     }
 }

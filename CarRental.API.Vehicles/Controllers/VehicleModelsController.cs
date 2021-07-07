@@ -32,7 +32,7 @@ namespace CarRental.API.Vehicles.Controllers
             }
             return NotFound();
         }
-        [HttpGet("/available")]
+        [HttpGet("available")]
         public async Task<IActionResult> GetModelWithAvailableVehiclesAsync()
         {
             var result = await vehicleModelsProvider.GetModelWithAvailableVehiclesAsync();

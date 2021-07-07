@@ -65,6 +65,17 @@ namespace CarRental.API.Reservation.Controllers
             }
             
         }
+        [HttpGet("customer/{CustomerCPF}")]
+        public async Task<IActionResult> GetReservationByCustomerAsync(string CustomerCPF)
+        {
+            var result = await reservationProvider.GetReservationByCustomerAsync(CustomerCPF);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Reservations);
+            }
+            return NotFound();
+        }
         [HttpPut("{id}/cancel")]
         [Authorize]
         public async Task<IActionResult> CancelReservationAsync(int id)
@@ -114,7 +125,6 @@ namespace CarRental.API.Reservation.Controllers
             return BadRequest();
         }
         [HttpPost("simulation")]
-        [Authorize]
         public async Task<IActionResult> PostReserveSimulationAsync(Models.ReserveSimulationRequest simulationRequest)
         {
             var result = await reservationProvider.PostReserveSimulationAsync(simulationRequest);

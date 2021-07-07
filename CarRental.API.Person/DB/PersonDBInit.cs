@@ -39,7 +39,7 @@ namespace CarRental.API.Person.DB
 
                 var customer = new DB.Person()
                 {
-                    Name = "LaudelinoC",
+                    Name = "Laudelino Cliente",
                     CPF = "12345678999",
                     UserName = "12345678999",
                     Birthdate = new System.DateTime(1990, 1, 1),
@@ -51,6 +51,42 @@ namespace CarRental.API.Person.DB
                     Street = "Franscisco Der"
                 };
                 result = await userManager.CreateAsync(customer, "Customer01!");
+                if (await roleManager.RoleExistsAsync(UserRoles.Customer))
+                {
+                    await userManager.AddToRoleAsync(customer, UserRoles.Customer);
+                }
+                customer = new DB.Person()
+                {
+                    Name = "Cliente Alugador",
+                    CPF = "00000000000",
+                    UserName = "00000000000",
+                    Birthdate = new System.DateTime(1980, 1, 1),
+                    CEP = "00000000",
+                    City = "Recife",
+                    Complement = "SB04",
+                    Number = "104",
+                    State = "PR",
+                    Street = "Franscisco Der"
+                };
+                result = await userManager.CreateAsync(customer, "Cliente123!");
+                if (await roleManager.RoleExistsAsync(UserRoles.Customer))
+                {
+                    await userManager.AddToRoleAsync(customer, UserRoles.Customer);
+                }
+                customer = new DB.Person()
+                {
+                    Name = "Uber Alugador",
+                    CPF = "98765432100",
+                    UserName = "98765432100",
+                    Birthdate = new System.DateTime(1970, 1, 1),
+                    CEP = "00000000",
+                    City = "Fortaleza",
+                    Complement = "SB04",
+                    Number = "104",
+                    State = "PR",
+                    Street = "Franscisco Der"
+                };
+                result = await userManager.CreateAsync(customer, "Uber123!");
                 if (await roleManager.RoleExistsAsync(UserRoles.Customer))
                 {
                     await userManager.AddToRoleAsync(customer, UserRoles.Customer);
