@@ -85,7 +85,7 @@ namespace CarRental.API.Reservation.DB
 
                 dbContext.Reservations.Add(new DB.Reservation()
                 {
-                    Id = 6,
+                    Id = 7,
                     Status = ReservationStatus.Active,
                     CustomerCPF = "98765432100",
                     EstimatedTotal = 3 * 30 * 24,
